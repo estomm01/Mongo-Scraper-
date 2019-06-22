@@ -8,8 +8,7 @@ var Save = require("../models/Save");
 
 module.exports = function (app) {
     app.get("/scrape", function (req, res) {
-        request("https://www.nytimes.com/", function (error, response, html) {
-
-            // Load the HTML into cheerio and save it to a variable
-            // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
-            var $ = cheerio.load(html);
+  // First, we grab the body of the html with axios
+  axios.get("http://www.echojs.com/").then(function(response) {
+    // Then, we load that into cheerio and save it to $ for a shorthand selector
+    var $ = cheerio.load(response.data);
