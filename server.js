@@ -15,14 +15,17 @@ var PORT = process.env.PORT || 4000;
 app.use(logger("dev"));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
+app.use(logger('dev'));
 app.use(express.json());
 // Make public a static folder
-app.use(express.static("public"));
-
+app.use(express.static("./public"));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({
+//     extended: true
 
 // connect to database
-// Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+// // Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/scrapper", { useNewUrlParser: true });
 
 
 var db = mongoose.connection;
@@ -40,16 +43,16 @@ app.engine("handlebars", exphbs({
 
 app.set("view engine", "handlebars");
 
-app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "views/index.html"));
-});
+// app.get("/", function (req, res) {
+//     res.sendFile(path.join(__dirname, "views/index.handlebars"));
+// });
 
 require("./routes/scrape")(app);
 require("./routes/html.js")(app);
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "views/index.html"));
-});
+// app.get("*", function (req, res) {
+//     res.sendFile(path.join(__dirname, "views/index.handlebars"));
+// });
 
 
 app.listen(PORT, function () {
