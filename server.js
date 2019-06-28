@@ -9,8 +9,8 @@ var logger = require("morgan");
 var cheerio = require("cheerio");
 var path = require("path");
 var app = express();
-var PORT = process.env.PORT || 4000;
-
+var PORT = process.env.PORT || 3000;
+var axios = require("axios");
 // Use morgan logger for logging requests
 app.use(logger("dev"));
 // Parse request body as JSON
@@ -38,7 +38,8 @@ db.once('open', function(){
 var exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({
-    defaultLayout: "main"
+    defaultLayout: "main",
+  //  partialsDir: path.join(__dirname, "views/layouts/partials/main.handlebars")
 }));
 
 app.set("view engine", "handlebars");
@@ -47,7 +48,7 @@ app.set("view engine", "handlebars");
 //     res.sendFile(path.join(__dirname, "views/index.handlebars"));
 // });
 
-require("./routes/scrape")(app);
+// require("./routes/scrape")(app);
 require("./routes/html.js")(app);
 
 // app.get("*", function (req, res) {
