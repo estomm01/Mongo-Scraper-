@@ -27,19 +27,22 @@ app.use(express.static("./public"));
 // // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/scrapper", { useNewUrlParser: true });
 
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
 
 var db = mongoose.connection;
-db.on('error',function(err){
-    console.log('Mongoose Error',err);
+db.on('error', function (err) {
+    console.log('Mongoose Error', err);
 });
-db.once('open', function(){
+db.once('open', function () {
     console.log("Mongoose connection is successful");
 });
 var exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({
     defaultLayout: "main",
-  //  partialsDir: path.join(__dirname, "views/layouts/partials/main.handlebars")
+    partialsDir: path.join(__dirname, "views/layouts/partials")
 }));
 
 app.set("view engine", "handlebars");
@@ -47,15 +50,15 @@ app.set("view engine", "handlebars");
 // app.get("/", function (req, res) {
 //     res.sendFile(path.join(__dirname, "views/index.handlebars"));
 // });
-
-// require("./routes/scrape")(app);
-require("./routes/html.js")(app);
+ require("./routes/scrape.js")(app);
 
 // app.get("*", function (req, res) {
 //     res.sendFile(path.join(__dirname, "views/index.handlebars"));
 // });
 
 
+
+console.log("walla");
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
 });
