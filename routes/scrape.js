@@ -9,17 +9,44 @@ var axios = require("axios");
 
 
 module.exports = function (app) {
+  app.get("/getArticle", function (req, res) {
+
+    // db find all mongo
+
+    Article.find({})
+      .then(function (dbArticle) {
+        // If we were able to successfully find Articles, send them back to the client
+        console.log(dbArticle);
+        res.json(dbArticle);
+      })
+      .catch(function (err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+      });
+
+    //  res.render("home.handlebars");
+    // end of db find all
+  });
+  app.get("/", function (req, res) {
+    res.render("home.handlebars");
+    //res.json({dummy: "test"});
+  });
+
+  app.get("/saved/all", function (req, res) {
+    res.render("saved");
+  });
+
   app.get("/scrape", function (req, res) {
-    //console.log("test");
+    console.log("test");
     // First, we grab the body of the html with axios
     axios.get("http://www.buzzfeednews.com/").then(function (response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
-      var results = [];
-      console.log(results);
-
+      //var result = [];
+      //console.log(results);
+      var result = {};
       $("article").each(function (i, element) {
-        var result = {};
+
 
         result.summary = $(this)
           .children("a")
@@ -39,15 +66,16 @@ module.exports = function (app) {
         result.link = $(this)
           .children("a")
           .attr("href");
-        console.log(result)
+
         // if (result.link !== "" || result.title !== "") {
         //   results.push
         // }
         // results.push(result);
       });
-
+      console.log(result)
+      console.log("======")
       // Create a new Article using the `result` object built from scraping
-      Article.create(results)
+      Article.create(result)
         .then(function (dbArticle) {
           // View the added result in the console
           //     console.log(dbArticle);
